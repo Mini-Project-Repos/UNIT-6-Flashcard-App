@@ -8,8 +8,12 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.get("/hello", (req, res) => {
-  res.send("<h1>Hello JS Developer!</h1>");
+app.get("/cards", (req, res) => {
+  // res.locals.prompt = "Who is buried in Grant's Tomb?"
+  res.render("card", {
+    prompt: "Who is buried in Grant's Tomb?",
+    hint: "Think about whose tomb it is."
+  });
 });
 
 //   process.env.PORT, process.env.IP
