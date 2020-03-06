@@ -2,6 +2,8 @@ const express = require("express");
 
 const app = express();
 
+const colors = ["red", "orange", "yellow", "green", "blue", "purple"];
+
 app.set("view engine", "pug");
 
 app.get("/", (req, res) => {
@@ -12,7 +14,8 @@ app.get("/cards", (req, res) => {
   // res.locals.prompt = "Who is buried in Grant's Tomb?"
   res.render("card", {
     prompt: "Who is buried in Grant's Tomb?",
-    hint: "Think about whose tomb it is."
+    colors
+    // hint: "Think about whose tomb it is."
   });
 });
 
