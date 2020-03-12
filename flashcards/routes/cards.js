@@ -13,16 +13,36 @@ const { cards } = data;
 ex. www.website.com/cards/3 OR www.website.com/cards/2. The 2 and 3 constitute the id param
 
 */
-router.get("/cards:id", (req, res) => {
-  // res.locals.prompt = "Who is buried in Grant's Tomb?"
-  res.render("card", {
-    //the params is the additional info added to the get route above(:id) and id is the name of those params being passed in
-    /*the id is taking what is being added on the url and passing it in. In this case, we are looking for the id(see JSON) 
-      of the different cards(0,1,2,3,etc)
-      */
-    prompt: cards[req.params.id].question,
-    hint: cards[req.params.id].hint
-  });
+router.get("/:id", (req, res) => {
+  let { side } = req.query;
+  console.log(side);
+  const { id } = req.params;
+  console.log(id);
+  if (!side) {
+    return res.redirect(`/cards/${id}?side=question`);
+  }
+  const name = req.cookies.username;
+  const text = cards[id][side];
+  console.log(text);
+  const { hint } = cards[id];
+  let templateData;
+
+  if (side === "question") {
+    side = "answer";
+    templateData = { id, side, text, hint, name };
+  } else {
+    side = "question";
+    templateData = { id, text, name, side };
+  }
+  console.log(templateData);
+  res.render("card", templateData);
+});
+
+router.get("/", (req, res) => {
+  const randomNum = Math.floor(Math.random() * cards.length);
+  const card = cards[randomNum];
+  const id = randomNum;
+  res.redirect(`/cards/${id}?side=question`);
 });
 
 //exports the router routes

@@ -7,6 +7,7 @@ const app = express();
 //forms encode data the same way that URL's to do so you need to use urlencoded method and set its extensions to false
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use("/static", express.static("public"));
 
 app.set("view engine", "pug");
 
@@ -37,12 +38,10 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  //the err param will contain data on the error itself which can be passed into the template
   res.locals.error = err;
-  //sends the error status code to the server
-  res.status(err.status);
-  //renders the error template and passes the err info to the template
-  res.render("error", err);
+  if (err.status >= 100 && err.status < 600) res.status(err.status);
+  else res.status(500);
+  res.render("error");
 });
 
 //   process.env.PORT, process.env.IP
